@@ -1,0 +1,25 @@
+function rot13(str) {
+  const start = 'ABCDEFGHIJKLM'
+  const end = 'NOPQRSTUVWXYZ'
+  let startArr = start.split('')
+  let endArr = end.split('')
+  str = str.split('')
+
+  str = str.map(el => {
+    const isAlphabet = (/[A-Z]/).test(el)
+    if(isAlphabet) {
+      if(startArr.includes(el)) {
+        const index = startArr.findIndex(elem => elem === el)
+         return endArr[index]
+      } else {
+        const index = endArr.findIndex(elem => elem === el)
+        return startArr[index]
+      } 
+    } else return el 
+  })
+
+  str = str.join('')
+  return str;
+}
+
+rot13("SERR PBQR PNZC");

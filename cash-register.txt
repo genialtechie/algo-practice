@@ -1,0 +1,48 @@
+function checkCashRegister(price, cash, cid) {
+  let change = {
+    status: '',
+    change: cid
+  }
+  let dueChange = (cash - price).toFixed(2)
+  let total = 0
+  let changeArr = []
+  const currency = {
+    PENNY: 0.01,
+    NICKEL: 0.05,
+    DIME: 0.10,
+    QUARTER: 0.25,
+    ONE: 1.00,
+    FIVE: 5.00,
+    TEN: 10.00,
+    TWENTY: 20.00,
+    'ONE HUNDRED': 100.00 
+  }
+
+  cid.forEach(([, amount] = el) => total += amount )
+  total.toFixed(2)
+  
+  if(dueChange > total){
+    return {status: 'INSUFFICIENT_FUNDS', change: []}
+  } else if (dueChange == total){
+    change.status = 'CLOSED'
+    return change
+  } else {
+    cid.reverse()
+    cid.forEach(([unit, amount] = el) => {
+      let toGive = [unit, 0]
+      while(amount > 0 && dueChange >= currency[unit]){
+        toGive[1] += currency[unit]
+        amount -= currency[unit]
+        dueChange -= currency[unit]
+        dueChange = dueChange.toFixed(2)
+      }
+      if(toGive[1] > 0) changeArr.push(toGive)
+    })
+  }
+  if(dueChange > 0) {
+      return {status: 'INSUFFICIENT_FUNDS', change: []}
+  }
+  return {status: 'OPEN', change: changeArr}
+}
+
+checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]])
